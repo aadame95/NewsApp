@@ -1,11 +1,17 @@
 package com.example.android.newsapp;
 
 import android.net.Uri;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -32,10 +38,10 @@ public class NetworkUtils {
 
 
     public static URL makeUrl (String searchQuery){
-       Uri uri = Uri.parse(BASE_URL).buildUpon()
-               .appendQueryParameter(searchQuery, SOURCE)
-               .appendQueryParameter(SORT_BY, sortBy)
-               .appendQueryParameter(APIKEY, apiKey).build();
+        Uri uri = Uri.parse(BASE_URL).buildUpon()
+                .appendQueryParameter(searchQuery, SOURCE)
+                .appendQueryParameter(SORT_BY, sortBy)
+                .appendQueryParameter(APIKEY, apiKey).build();
 
 
         URL url = null;
@@ -68,5 +74,25 @@ public class NetworkUtils {
         }finally {
             urlConnection.disconnect();
         }
+    }
+
+    public static ArrayList<NewsItem> parseJSON(String json) throws JSONException {
+        ArrayList<NewsItem> result = new ArrayList<>();
+        JSONObject main = new JSONObject(json);
+        JSONArray articles = main.getJSONArray("articles");
+
+        for(int i = 0; i < articles.length(); i++){
+            JSONObject article = articles.getJSONObject(i);
+            String title = article.getString("title");
+            String description = article.getString("description");
+            String url = article.getString("url");
+
+            String publishedAt = article.getString("publishedAt");
+
+
+            NewsItem report = new NewsItem(title, description, url, publishedAt);
+            result.add(report);
+        }
+        return result;
     }
 }
