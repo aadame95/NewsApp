@@ -2,6 +2,8 @@ package com.example.android.newsapp;
 
 import android.net.Uri;
 
+import com.example.android.newsapp.data.NewsItem;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,9 +24,7 @@ import java.util.Scanner;
 
 public class NetworkUtils {
 
-    private static final String BASE_URL = "https://newsapi.org/v1/articles";
-
-    private static final String SOURCE = "the-next-web";
+    private static final String BASE_URL = "https://newsapi.org/v1/articles?source=the-next-web";
 
     private static final String SORT_BY = "sortBy";
     private static final String sortBy = "latest";
@@ -33,13 +33,12 @@ public class NetworkUtils {
 
     private final static String APIKEY = "apiKey";
     //---------------------------------------------Please add apiKey!!!!!!------------------------------------------------------------
-    final static String apiKey = "";
+    final static String apiKey = "649a31de340a4db7880787e6900fd1d0";
 
 
 
-    public static URL makeUrl (String searchQuery){
+    public static URL makeUrl (){
         Uri uri = Uri.parse(BASE_URL).buildUpon()
-                .appendQueryParameter(searchQuery, SOURCE)
                 .appendQueryParameter(SORT_BY, sortBy)
                 .appendQueryParameter(APIKEY, apiKey).build();
 
@@ -76,6 +75,7 @@ public class NetworkUtils {
         }
     }
 
+    //urlToImage was added to get the url needed to get the image to display
     public static ArrayList<NewsItem> parseJSON(String json) throws JSONException {
         ArrayList<NewsItem> result = new ArrayList<>();
         JSONObject main = new JSONObject(json);
@@ -89,8 +89,11 @@ public class NetworkUtils {
 
             String publishedAt = article.getString("publishedAt");
 
+            String urlToImage = article.getString("urlToImage");
 
-            NewsItem report = new NewsItem(title, description, url, publishedAt);
+
+
+            NewsItem report = new NewsItem(title, description, url, publishedAt, urlToImage);
             result.add(report);
         }
         return result;

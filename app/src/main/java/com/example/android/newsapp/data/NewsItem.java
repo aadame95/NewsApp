@@ -1,4 +1,4 @@
-package com.example.android.newsapp;
+package com.example.android.newsapp.data;
 
 /**
  * Created by Andres on 6/27/17.
@@ -13,11 +13,12 @@ public class NewsItem {
     String urlToImage;
     String publishedAt;
 
-    public NewsItem (String title, String description, String url, String publishedAt){
+    public NewsItem (String title, String description, String url, String publishedAt, String urlToImage){
         this.title = title;
         this.description = description;
         this.url = url;
         this.publishedAt = publishedAt;
+        this.urlToImage = urlToImage;
 
     }
 
